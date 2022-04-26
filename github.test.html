@@ -2,33 +2,33 @@
 <html>
 
 <head>
-	<meta charset="utf-8">
-	<title></title>
-	<script type="module">
-		import GithubCloud from "./github.js"
-		const github = new GithubCloud({
-			user: "drc-git",
-			repository: "store",
-			Authorization: "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",//end 2023-04-26
-		});
+    <meta charset="utf-8">
+    <title></title>
+    <script type="module">
+        import GithubCloud from "./github.js"
+        const github = new GithubCloud({
+            owner: "drc-git",
+            repo: "store",
+            Authorization: "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",//end 2023-04-26
+        });
 
-		document.getElementById('get').onclick = function () {
-			github.getJson("jx3/match.json").then(console.log)
-		}
-		document.getElementById('put').onclick = function () {
-			github.putJson("jx3/match.json", { leftList: [], rightList: [], time: Date.now() }).then(console.log)
-		}
-	</script>
+        document.getElementById('get').onclick = function () {
+            github.getJson("jx3/match.json").then(console.log)
+        }
+        document.getElementById('put').onclick = function () {
+            github.putJson("jx3/match.json", { leftList: [], rightList: [], time: Date.now() }).then(console.log)
+        }
+    </script>
 </head>
 
 <body>
-	<div id="get">
-		get
-	</div>
+    <div id="get">
+        get
+    </div>
 
-	<div id="put">
-		put
-	</div>
+    <div id="put">
+        put
+    </div>
 </body>
 
 </html>

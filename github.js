@@ -1,11 +1,11 @@
-import { Octokit } from "https://cdn.skypack.dev/@octokit/core";
+import { Octokit } from "https://cdn.skypack.dev/@octokit/core/dist-web"
 export default class GithubCloud {
     /**
-     * @param {{user:string, repository:string, Authorization:string}} options 
+     * @param {{owner:string, repo:string, Authorization:string}} options 
      */
     constructor(options) {
-        const { user, repository, Authorization } = options;
-        this.contentUrl = `/repos/${user}/${repository}/contents/`;
+        const { owner, repo, Authorization } = options;
+        this.contentUrl = `/repos/${owner}/${repo}/contents/`;
         this.octokit = new Octokit({ auth: Authorization });
         this.shaMap = new Map();
     }
