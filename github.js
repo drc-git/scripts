@@ -65,7 +65,7 @@ export default class GithubCloud {
         }
     }
 
-    async putJson(path, content) {
+    putJson(path, content) {
         return this.put(path, JSON.stringify(content, null, 2))
     }
 }
