@@ -5,29 +5,83 @@
     <meta charset="utf-8">
     <title></title>
     <script type="module">
+        import { createApp } from "https://unpkg.com/vue@next/dist/vue.esm-browser.prod.js"
         import GithubCloud from "./github.js"
         const github = new GithubCloud({
             owner: "drc-git",
-            repo: "store",
-            Authorization: "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",//end 2023-04-26
+            repo:"store",
+            // repo: "store.private",
+            // private: true,
+            Authorization: 'P.t.G.k.M.1.C.3.F.x.N.M.x.M.q.d.i.w.R.u.9.N.j.w.b.9.2.x.E.6.U.a.k.z.B.o._.p.h.g'.replace(/\./g, '').split('').reverse().join('')
         });
 
-        document.getElementById('get').onclick = function () {
-            github.getJson("jx3/match.json").then(console.log)
-        }
-        document.getElementById('put').onclick = function () {
-            github.putJson("jx3/match.json", { leftList: [], rightList: [], time: Date.now() }).then(console.log)
-        }
+        createApp({
+            data() {
+                return {
+                    path: 'test',
+                    filename: 'test.json',
+                    fileUrl: ''
+                }
+            },
+            computed: {
+                fullname() {
+                    return this.path ? `${this.path}/${this.filename}` : this.filename
+                }
+            },
+            methods: {
+                async getJson() {
+                    console.log(await github.getJson(this.fullname))
+                },
+                async putJson() {
+                    console.log(await github.putJson(this.fullname, { now: Date.now() }))
+                },
+                async uploadFile(e) {
+                    const file = e.target.files[0]
+                    console.log(await github.putFile(`test/${file.name}`, file))
+                },
+                async getFile() {
+                    if (this.fileUrl) {
+                        URL.revokeObjectURL(this.fileUrl);
+                        this.fileUrl = "";
+                    }
+                    const file = await github.getFile(this.fullname);
+                    this.fileUrl = URL.createObjectURL(file);
+                },
+                async remove() {
+                    console.log(await github.remove(this.fullname))
+                }
+            }
+        }).mount('#app')
     </script>
 </head>
 
 <body>
-    <div id="get">
-        get
-    </div>
-
-    <div id="put">
-        put
+    <div id="app">
+        <p>
+            <label>path</label> <input v-model="path" />
+        </p>
+        <p>
+            <label>fileName</label> <input v-model="filename" />
+        </p>
+        <p>
+            <button @click.prevent="getJson">get json</button>
+        </p>
+        <p>
+            <button @click.prevent="putJson">put json</button>
+        </p>
+        <p>
+            <button @click.prevent="getFile">get file</button>
+            <template v-if="fileUrl">
+                <a :href="fileUrl">{{fileUrl}}</a>
+                <img :src="fileUrl" />
+            </template>
+        </p>
+        <p>
+            <input type="file" @change="uploadFile" />
+        </p>
+        <p>
+            <button @click.prevent="remove">delete</button>
+        </p>
     </div>
 </body>
 
