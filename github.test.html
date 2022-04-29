@@ -4,15 +4,20 @@
 <head>
     <meta charset="utf-8">
     <title></title>
+    <!-- <script src="https://unpkg.com/crypto-js@latest/crypto-js.js"></script> -->
+    <!-- <script src="./aes.js"></script> -->
     <script type="module">
+        import { aesEncrypt, aesDecrypt } from "./aes.js"
         import { createApp } from "https://unpkg.com/vue@next/dist/vue.esm-browser.prod.js"
         import GithubCloud from "./github.js"
+        const ciphertext = "WyIlh6Sr4W4vfmx7XGbj1Fff+yIsIpy33Fx1MDAwNWZcdTAwMDBPa1BVSIr0xkBJ8Kzqwp/7omJFXHUwMDFinTvRM7RcdTAwMWHtXHUwMDA2esjG4kGhWFx1MDAxZTFcdFx1MDAwMmdogyJd";
+        const Authorization = await aesDecrypt(ciphertext, location.search.slice(1));
         const github = new GithubCloud({
             owner: "drc-git",
-            repo:"store",
+            repo: "store",
             // repo: "store.private",
             // private: true,
-            Authorization: 'P.t.G.k.M.1.C.3.F.x.N.M.x.M.q.d.i.w.R.u.9.N.j.w.b.9.2.x.E.6.U.a.k.z.B.o._.p.h.g'.replace(/\./g, '').split('').reverse().join('')
+            Authorization
         });
 
         createApp({
@@ -20,7 +25,10 @@
                 return {
                     path: 'test',
                     filename: 'test.json',
-                    fileUrl: ''
+                    fileUrl: '',
+                    key: "",
+                    content: "",
+                    ciphertext: ""
                 }
             },
             computed: {
@@ -49,6 +57,14 @@
                 },
                 async remove() {
                     console.log(await github.remove(this.fullname))
+                },
+                async encrypt() {
+                    const e = await aesEncrypt(this.content);
+                    this.key = e.key;
+                    this.ciphertext = e.ciphertext
+                },
+                async decrypt() {
+                    this.content = await aesDecrypt(this.ciphertext, this.key)
                 }
             }
         }).mount('#app')
@@ -82,6 +98,13 @@
         <p>
             <button @click.prevent="remove">delete</button>
         </p>
+
+        <h2>AES</h2>
+        <button @click.prevent="encrypt">加密</button>
+        <button @click.prevent="decrypt">解密</button>
+        <textarea v-model="content"></textarea>
+        <textarea v-model="key"></textarea>
+        <textarea v-model="ciphertext"></textarea>
     </div>
 </body>
 
