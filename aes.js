@@ -79,5 +79,5 @@ function uint8ArrayToString(uint8Array) {
 }
 
 function arrayBufferToString(ab) {
-    return uint8ArrayToString(ab)//new Uint8Array(ab))
+    return uint8ArrayToString(new Uint8Array(ab))
 }
