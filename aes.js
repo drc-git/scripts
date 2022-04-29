@@ -30,6 +30,21 @@ export async function aesDecrypt(ciphertext, key) {
     return arrayBufferToString(data)
 }
 
+export async function aesDecryptUrlKey(ciphertext) {
+    let key = location.search.slice(1);
+    if (!key) {
+        key = sessionStorage.getItem('aes.key')
+    }
+    if (!key) {
+        key = prompt("请输入 key")
+    }
+    if (!key) {
+        return Promise.reject("请输入 key")
+    }
+    sessionStorage.setItem('aes.key', key);
+    return aesDecrypt(ciphertext, key)
+}
+
 async function generateAesKey(length = 256) {
     const key = await crypto.subtle.generateKey(
         {

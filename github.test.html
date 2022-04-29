@@ -7,11 +7,11 @@
     <!-- <script src="https://unpkg.com/crypto-js@latest/crypto-js.js"></script> -->
     <!-- <script src="./aes.js"></script> -->
     <script type="module">
-        import { aesEncrypt, aesDecrypt } from "./aes.js"
+        import { aesEncrypt, aesDecrypt, aesDecryptUrlKey } from "./aes.js"
         import { createApp } from "https://unpkg.com/vue@next/dist/vue.esm-browser.prod.js"
         import GithubCloud from "./github.js"
         const ciphertext = "WyIlh6Sr4W4vfmx7XGbj1Fff+yIsIpy33Fx1MDAwNWZcdTAwMDBPa1BVSIr0xkBJ8Kzqwp/7omJFXHUwMDFinTvRM7RcdTAwMWHtXHUwMDA2esjG4kGhWFx1MDAxZTFcdFx1MDAwMmdogyJd";
-        const Authorization = await aesDecrypt(ciphertext, location.search.slice(1));
+        const Authorization = await aesDecryptUrlKey(ciphertext);
         const github = new GithubCloud({
             owner: "drc-git",
             repo: "store",
